@@ -1,1 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Poem & Prospers Masterclass</title>
+    <style>
+        :root {
+            --bg-color: #05070a;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --accent-color: #3b82f6;
+            --accent-glow: rgba(59, 130, 246, 0.5);
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --flame-color: #ff8c00;
+            --premium-gradient: linear-gradient(90deg, #ff8c00, #ffed00, #ff00ea, #ff8c00);
+            --green-subtle: #10b981;
+        }
 
+        /* HARDWARE NATIVE CURSOR (ZERO LAG) */
+        * { cursor: url('orange.png') 16 16, auto !important; }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: radial-gradient(circle at 50% 0%, #111827 0%, #05070a 100%);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            -webkit-user-select: none; -ms-user-select: none; user-select: none;          
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-color); }
+
+        header {
+            text-align: center;
+            padding: 60px 20px 20px 20px;
+            font-size: clamp(28px, 7vw, 42px);
+            font-weight: 900;
+            letter-spacing: -2px;
+            text-transform: uppercase;
+            color: #fff;
+            text-shadow: 0 0 30px rgba(255, 140, 0, 0.3);
+        }
+
+        .nav-container {
+            position: sticky; top: 20px; z-index: 1000;
+            display: flex; justify-content: center; padding: 0 20px;
+        }
+
+        .tabs {
+            display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; padding: 10px;
+            background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .tab {
+            padding: 12px 24px; border-radius: 14px; font-size: 13px; font-weight: 700; color: var(--text-dim);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid transparent; text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        .tab:hover { color: #fff; background: rgba(255, 255, 255, 0.08); transform: scale(1.1) translateY(-3px); }
+
+        .activeTab {
+            color: #fff !important; background: rgba(59, 130, 246, 0.2) !important;
+            border: 1px solid var(--accent-color) !important; box-shadow: 0 0 20px var(--accent-glow) !important;
+        }
+
+        .premium-tab {
+            border: 2px solid transparent !important;
+            background: linear-gradient(#111, #111) padding-box, var(--premium-gradient) border-box !important;
+            background-size: 200% auto !important;
+            animation: border-rotate 2s linear infinite, premium-pulse 2s ease-in-out infinite alternate !important;
+        }
+
+        @keyframes border-rotate { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
+        @keyframes premium-pulse { from { box-shadow: 0 0 10px rgba(255, 140, 0, 0.5); } to { box-shadow: 0 0 30px rgba(255, 69, 0, 0.8); } }
+
+        .tab-content { display: none; padding: 60px 20px; max-width: 1000px; margin: auto; animation: slideUp 0.4s ease-out; }
+        .active { display: block; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        h2 { font-size: 36px; margin-bottom: 20px; color: #fff; border-left: 5px solid var(--accent-color); padding-left: 20px; }
+        h3 { font-size: 22px; margin-top: 40px; margin-bottom: 15px; color: var(--accent-color); text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid rgba(59, 130, 246, 0.2); padding-bottom: 10px; }
+
+        .step {
+            background: var(--card-bg); margin: 15px 0; padding: 25px; border-radius: 16px;
+            border: 1px solid var(--glass-border); transition: all 0.3s ease;
+        }
+        .step:hover { background: rgba(255, 255, 255, 0.06); border-color: rgba(59, 130, 246, 0.4); transform: translateX(12px); }
+        .title { font-size: 19px; font-weight: 700; margin-bottom: 10px; color: #fff; }
+        .step-desc { color: var(--text-main); font-size: 15px; line-height: 1.8; }
+        b { color: #fff; font-weight: 800; }
+
+        .takeaway-box {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(192, 132, 252, 0.1));
+            border: 1px solid var(--accent-color); padding: 30px; border-radius: 20px; margin: 40px 0;
+        }
+
+        .calcWrap { width: 100%; height: 85vh; border-radius: 20px; overflow: hidden; border: 1px solid var(--glass-border); background: #000; position: relative; }
+        iframe { width: 100%; height: 100%; border: none; }
+        .btn-launch { padding: 12px 25px; background: var(--flame-color); color: #000; text-decoration: none; font-weight: bold; border-radius: 8px; display: inline-block; margin-top: 15px; }
+        .zone-image { width: 100%; max-width: 600px; display: block; margin: 25px auto; border-radius: 20px; border: 1px solid var(--accent-color); }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+    <header>Poem & Prospers Masterclass</header>
+
+    <div class="nav-container">
+        <div class="tabs">
+            <div class="tab activeTab" onclick="openTab('main', this)">Main Tips</div>
+            <div class="tab" onclick="openTab('routine', this)">Routine</div>
+            <div class="tab" onclick="openTab('offspawn', this)">Offspawn</div>
+            <div class="tab" onclick="openTab('divisions', this)">Divisions</div>
+            <div class="tab" onclick="openTab('pros', this)">Pros</div>
+            <div class="tab" onclick="openTab('gamesense', this)">Game Sense</div>
+            <div class="tab" onclick="openTab('zones', this)">Zones</div>
+            <div class="tab green-tab" style="border: 1px solid rgba(16, 185, 129, 0.2); color: #a7f3d0;" onclick="openTab('freecalc', this)">Free Calc</div>
+            <div class="tab premium-tab" onclick="openTab('dropmazter', this)">👑 DropMAZTER</div>
+        </div>
+    </div>
+
+    <!-- MAIN TIPS -->
+    <div id="main" class="tab-content active">
+        <h2>Main Strategy & Mechanics</h2>
+        <h3>🧠 IGL Concepts</h3>
+        <div class="step"><div class="title">Positioning > Kills</div><div class="step-desc">If you remember ONE thing, make it this.<br> Don’t chase kills if it ruins rotation.<br> Don’t fight when zone is moving.<br> Get front side early.<br> Positioning wins games.</div></div>
+        <div class="step"><div class="title">Think Before You Fight</div><div class="step-desc">Do we need this fight?<br> Will it mess up rotate?<br> Is it free or risky?<br> Play brain, not ego.</div></div>
+        <div class="step"><div class="title">Always Be Ahead of Zone</div><div class="step-desc">Rotate early.<br> Use teams as cover.<br> Avoid open space.<br> If you're not ahead, you're behind.</div></div>
+        <div class="step"><div class="title">Play Deadside</div><div class="step-desc">Avoid crowded zones.<br> Rotate through empty space.<br> More control, less damage.</div></div>
+        <div class="step"><div class="title">Endgame Focus</div><div class="step-desc">Stay alive.<br> Get safe refreshes.<br> Only fight for mats or position.</div></div>
+
+        <h3>🎯 Peterbot Fighting Style</h3>
+        <div class="step"><div class="title">Make people panic, then punish them</div><div class="step-desc">Tap their wall a couple times (pickaxe).<br>Stop and wait.<br>Most players panic-edit → you shoot them for free.<br><br><b>Idea: don’t rush. Make them make mistakes.</b></div></div>
+        <div class="step"><div class="title">Wait for the edit, don’t guess</div><div class="step-desc">Bad players spam edits.<br>Good players wait.<br>When they finally edit → you hit them hard first.<br><br><b>Idea: patience = free damage.</b></div></div>
+        <div class="step"><div class="title">Always shoot from a safe angle</div><div class="step-desc">Don’t stand in the open.<br>Peek from the side, window, or behind cover.<br><br><b>Idea: hit them without them hitting you.</b></div></div>
+        <div class="step"><div class="title">Keep moving so you’re hard to hit</div><div class="step-desc">Jump, strafe, don’t run straight in.<br>Move while taking walls or fighting.<br><br><b>Idea: harder target = you survive more.</b></div></div>
+        <div class="step"><div class="title">Change your angle constantly</div><div class="step-desc">Don’t peek the same spot twice.<br>Move left/right or up/down.<br><br><b>Idea: confuse the enemy so they miss shots.</b></div></div>
+        <div class="step"><div class="title">Don’t rush into boxes blindly</div><div class="step-desc">Only go in when you see an opening.<br>Hold shotgun ready first.<br><br><b>Idea: patience gets kills, rushing gets you one-pumped.</b></div></div>
+        <div class="step"><div class="title">Control space around enemies</div><div class="step-desc">Put walls/floors/cones in their box or near them.<br>Force them into bad positions.<br><br><b>Idea: you control the fight, not them.</b></div></div>
+        <div class="step"><div class="title">Finish fights smart</div><div class="step-desc">Heal before going again.<br>Don’t ignore third parties.<br>Reset builds so you’re safe.</div></div>
+
+        <h3>🔥 Advanced Fighting Tactics</h3>
+        <div class="step"><div class="title">🔥 1. End fights FAST</div><div class="step-desc">The longer a fight lasts, the higher chance you get third-partied.<br>Key trick:<br>If enemy has no cone in their box → place one from above<br>Pre-piece the box below → free kill when they drop<br>👉 Goal: Don’t drag fights out. Finish quickly and move on.</div></div>
+        <div class="step"><div class="title">⚡ 2. Use “Counter Damage” when low HP</div><div class="step-desc">Don’t panic-heal when you’re weak and getting pushed.<br>Instead:<br>Fake an escape<br>Catch them off guard with an edit + shot<br>👉 You can still win fights even when cracked if you outplay instead of running.</div></div>
+        <div class="step"><div class="title">🧱 3. High Walls = Easy Control</div><div class="step-desc">When someone has height:<br>Side jump + place high walls above them<br>This steals control and lets you piece them<br>👉 Great for retakes and gaining control safely.</div></div>
+        <div class="step"><div class="title">🪜 4. Ramp Phase Trick (SUPER IMPORTANT)</div><div class="step-desc">Instead of taking walls: Swing → place a ramp inside their box. Forces them out → you pre-piece the next box<br>👉 This is one of the most consistent ways to win fights, especially on high ping.</div></div>
+        <div class="step"><div class="title">📦 5. Fight from a Box Away</div><div class="step-desc">Don’t take 50/50 fights.<br>Always keep a full box of distance:<br>Place builds between you and opponent<br>Peek safely<br>👉 You deal damage without taking damage back.</div></div>
+
+        <h3>⚔️ Fighting Mechanics</h3>
+        <div class="step"><div class="title">Wait for Edit</div><div class="step-desc">Don’t guess. Good players wait patiently. Free damage when they open.</div></div>
+        <div class="step"><div class="title">Safe Angles Only</div><div class="step-desc">Never stand open. Always peek cover. Hit without getting hit.</div></div>
+        <div class="step"><div class="title">Control Space</div><div class="step-desc">Place walls/cones around enemy. Force bad positions. You control tempo.</div></div>
+
+        <h3>🧠 Shxrk Fighting Concepts</h3>
+        <div class="step"><div class="title">Right-Hand Peeks</div><div class="step-desc">Always fight right-hand advantage. Constant repositioning. Hard to pre-aim or counter.</div></div>
+        <div class="step"><div class="title">Piece Control + Exit Denial</div><div class="step-desc">Block escape routes. Cone + control structures. Commit only when locked.</div></div>
+        <div class="step"><div class="title">Angle Switching</div><div class="step-desc">Hit → move → hit again. Never stay static. Force reaction errors.</div></div>
+        <div class="step"><div class="title">Prediction Play</div><div class="step-desc">Pre-build where enemy will go. Don’t react—anticipate. Free kills from timing.</div></div>
+    </div>
+
+    <!-- ROUTINE -->
+    <div id="routine" class="tab-content">
+        <h2>Training Routine</h2>
+        <div class="takeaway-box">
+            <div class="title" style="color: var(--flame-color);">🧠 Core Idea (MOST IMPORTANT)</div>
+            <div class="step-desc" style="color: #fff;">
+                Fighting isn’t just aim + mechanics<br>
+                At higher levels, it’s mostly <b>Fighting IQ</b><br>
+                • Smart peeks | • Predicting opponents | • Decision-making under pressure
+            </div>
+        </div>
+        <div class="step"><div class="title">1. Start With 1v1s (NO warmup)</div><div class="step-desc">Play Realistics or Zone Wars immediately. Don’t freebuild or aim train first. Why: Forces you to rely on brain > mechanics. Builds real fight awareness. How: Play ~30 rounds (15–20 mins). Fight players at your level or better. Pick the mode you’re worst at.</div></div>
+        <div class="step"><div class="title">2. Endgame Practice (10 games only)</div><div class="step-desc">Play: Zone Wars (32-player) or Solo endgame maps. Focus on: Placement, Smart rotations, Staying alive. Rules: Only play 10 rounds. Try to improve score each session. Why: Builds awareness, positioning, and survival IQ.</div></div>
+        <div class="step"><div class="title">3. Play Ranked Reload (MAIN PRACTICE)</div><div class="step-desc">This is where most improvement happens. Play based on your weakness, NOT your strengths.<br><br><b>A. Defensive weak players:</b> Struggle when low HP / take too much damage. <i>Fix: Play slow, focus on smart peeks, avoid damage.</i><br><b>B. Aggressive weak players:</b> Can’t finish fights quickly. <i>Fix: Push more fights, carry mobility, end fights faster.</i><br><br>Mode: Solo vs Duo or Duo vs Duo. Avoid Squads (players too easy).</div></div>
+        <div class="step"><div class="title">🔍 Final Step (SUPER IMPORTANT) - Review Mistakes</div><div class="step-desc">Review your mistakes. After fights or games: Rewatch deaths (or replay in your head). Ask: “What did I do wrong?” “What could I have done better?” Examples: Bad peek, Wrong edit, Over-aggression, Positioning errors. 👉 <b>Don’t blame luck — find a real reason.</b></div></div>
+        <div class="step"><div class="title">⚡ Simple Summary</div><div class="step-desc">Skip warmups → force IQ | 1v1s → build fight thinking | Endgames → build awareness | Reload → fix weaknesses | Rewatch → fix mistakes fast</div></div>
+    </div>
+
+    <!-- OFFSPAWN -->
+    <div id="offspawn" class="tab-content">
+        <h2>Offspawn Strategy</h2>
+        <div class="step"><div class="title">Core Rule</div><div class="step-desc">Survive first, fight second. Avoid 50/50s. Always build advantages before fighting. Winning spawn = free midgame.</div></div>
+        <div class="step"><div class="title">Drop Strategy</div><div class="step-desc">Plan before bus. Know loot path. Know escape route. Land fast, not random.</div></div>
+        <div class="step"><div class="title">Loot Priority</div><div class="step-desc">Shotgun first. Then heals. Then mats. Never overloot early.</div></div>
+        <div class="step"><div class="title">Audio Awareness</div><div class="step-desc">Listen for footsteps. Track chest opens. Predict enemy location early.</div></div>
+        <div class="step"><div class="title">First Fight Rule</div><div class="step-desc">Only fight with advantage. HP, gun, or position lead required. Otherwise reset.</div></div>
+        <div class="step"><div class="title">Avoid Greed</div><div class="step-desc">Don’t chase kills early. Don’t overextend loot. Reset after every fight.</div></div>
+        <div class="step"><div class="title">Midgame Setup</div><div class="step-desc">Get mats. Get heals. Stay stacked before rotating.</div></div>
+    </div>
+
+    <!-- DIVISIONS (FULL 1-1 RESTORED) -->
+    <div id="divisions" class="tab-content">
+        <h2>Divisions Guide</h2>
+        <div class="step"><div class="title">🧠 The Core Pattern (across ALL divisions)</div><div class="step-desc">Almost every mistake came down to 3 things:<br> No scouting (lack of info)<br> Tunnel vision (bad awareness)<br> Greed (unnecessary risk)<br><br> Fix those, and you’ll instantly outplay most players in Div 5–3.</div></div>
+        <div class="step">
+            <div class="title">📍 1. Positioning (Mid Game = Free Placement)</div>
+            <div class="step-desc">Biggest takeaway:<br> 👉 <b>Stop playing edge for no reason</b><br><br> Use the “split zone method”:<br> Divide zone into halves (horizontal + vertical)<br> Aim for center of a quadrant (slightly off-center)<br><br> Why it works: Higher pull chance | Easier rotates | Less congestion<br><br> <b>Bad play:</b> Box edge early → forced into stacked rotates<br> <b>Good play:</b> Take central/dead-side position → safe midgame control</div>
+        </div>
+        <div class="step"><div class="title">👀 2. Scouting = Free Wins</div><div class="step-desc">Good players are always looking around: Where teams are | Where dead side is | Where safe rotates are<br> <b>Mistakes:</b> Sitting still in box | Rotating without info | <b>Fix:</b> Constant peeks | Plan BEFORE moving | Always ask: “Where is safe?”</div></div>
+        <div class="step">
+            <div class="title">🧭 3. Rotating (Biggest Rank-Up Skill)</div>
+            <div class="step-desc">❌ <b>Bad players:</b> Run straight to zone, Go through middle, Land in chaos<br> ✅ <b>Correct play:</b> Rotate SIDE → then IN<br><br> Instead of straight line: ➡️➡️➡️ | Do safe pathing: ⬅️ then ⬆️ (dead side route)<br> Why: Less pressure, less damage, more control.</div>
+        </div>
+        <div class="step"><div class="title">🪂 4. Moving Zone Discipline</div><div class="step-desc"><b>NEVER:</b> Land frontside stacked areas | <b>DO:</b> Dead side rotates, Backside safe entries, Late storm entry if needed</div></div>
+        <div class="step"><div class="title">🔫 5. Stop Greeding</div><div class="step-desc">Common mistakes: Chasing extra kills, Over-looting, Taking bad fights.<br> <b>Rule:</b> 👉 1 kill = reset, reposition, survive</div></div>
+        <div class="step"><div class="title">🤝 6. Duo Fundamentals</div><div class="step-desc">Golden rule: Kill = loot priority | Teammate = builds/tarp<br> <b>Mistake:</b> Both chase loot → no protection → instant death</div></div>
+        <div class="step"><div class="title">🧱 7. Tarping</div><div class="step-desc">Problems: No space planning, Bad layer usage, Wasting mats early.<br> <b>Fix:</b> Always build buffer space, Use wood when safe, Don’t panic-layer</div></div>
+        <div class="step"><div class="title">🧠 8. Awareness > Mechanics</div><div class="step-desc">Most deaths come from: Tunnel vision, No audio tracking, Over-peeking.<br> <b>Fix:</b> Look more, shoot less</div></div>
+        <div class="step"><div class="title">💊 9. Storm & Heal Play</div><div class="step-desc">Smart plays: Tank storm when needed, Use heals efficiently ✔️<br> <b>Bad plays:</b> Panic healing, Wasting resources early</div></div>
+        <div class="step"><div class="title">⚠️ 10. Common Death Mistakes</div><div class="step-desc">No escape box | Splitting from teammate | No rotate plan | Over-peeking fights</div></div>
+        <div class="step"><div class="title">🏆 Summary: If You Fix Only 5 Things</div><div class="step-desc">1. Play center / dead side | 2. Always scout before rotating | 3. Rotate side → then in | 4. Stop greeding fights | 5. Always create tarp space</div></div>
+    </div>
+
+    <!-- PROS -->
+    <div id="pros" class="tab-content">
+        <h2>Pros Logic</h2>
+        <div class="step"><div class="title">👑 Reet's Solo Mastery Tips</div><div class="step-desc">
+            • Land somewhere you know will be uncontested last game to secure placement points.<br>
+            • While you fall onto a wall from the top of a box, swing your pickaxe. This will ensure you are safe from getting edited on while pickaxing and will add more pressure by breaking wall quicker. Make sure to pull out shotgun after you swing and be ready for hem to edit.<br>
+            • Open damage in a fight gives a very big advantage. Use the above tip above to play aggressive.<br>
+            • Farming in early game while rotating around, waiting for zone to close if you don't want to key anyone.<br>
+            • Zonewars and boxfights is the best realistic practice.<br>
+            • Using a dropmap is worth it, whether its a paid dropmap or free.<br>
+            • Going early or late on a rotation isn't really ever bad. Just make sure you won't get lobby focused.
+        </div></div>
+
+        <div class="step"><div class="title">👑 Reet's Duo FNCS tips</div><div class="step-desc">
+            • If you don't have surge and need it quick just take a quick fight with your duo if you are confident and have max health.<br>
+            • Even if you think or know you are the best person/duo in the lobby, you have to know when to lay back and calm down for a second in a game when keying.<br>
+            • Anyone can lose by not thinking enough or taking too many risks.<br>
+            • First game should be a key game. The goal for most people should be 10. Anything less is fine as long as you get the win. Many people get 10 kills then keeping keying and die, completely forgetting about the win part.<br>
+            • Look for good places to go for hight. It's not just building up. You can conserve 100+ materials by looking for a hill or higher elevated area and launch padding over before going for hight.<br>
+            • Constantly look at hight to see if they end up using wood and if they are, try to chop them. Make sure to not tunnel vision this though.
+        </div></div>
+
+        <div class="step"><div class="title">👑 T3eny Notes</div><div class="step-desc">
+            • He always pieces the area around him when entering a building<br>
+            • He always swings behind a right hand peak<br>
+            • He instantly makes loads of space when hit hard<br>
+            • He always pre pieces around the opponent's box<br>
+            • He always takes a safe protected peak even if he has a health advantage<br>
+            • He takes advantage of his opponents' mistakes. If thry aren't holding a wall, he will phase in<br>
+            • He uses natural cover when fighting without materials<br>
+            • He uses visual audio to predict opponents
+        </div></div>
+
+        <div class="step"><div class="title">👑 ThomasHD Notes</div><div class="step-desc">
+            • Always gets some damage before starting to fight to have a health advantage<br>
+            • One of the best aimers in fortnite<br>
+            • Rarely panics even in high pressure endgames<br>
+            • He is a very good fragger / Rarely wastes mats<br>
+            • Always try's to fight with a health advantage / Plays very smart in fights<br>
+            • Always takes safe peeks / Always looks at backside for free eliminations<br>
+            • Try's to keep front side in endgames as much as possible<br>
+            • Thomas looks for fights when he knows the person he gonna fight is not so good at the game<br>
+            • Sometimes fights only when he knows it's worth fighting for<br>
+            • Has really good movement when peeking<br>
+            • Thomas plays very safe in high elo fights
+        </div></div>
+
+        <div class="step"><div class="title">👑 Veno Notes</div><div class="step-desc">
+            • Predicts when the opponent is going to try breaking his wall (pickaxe or ar) and edits just before the opponent swings, causing him to get a free shot while his opponent is still holding out his pickaxe<br>
+            • This causes him to gain the HP advantage, which mostly causes the opponent to box up and heal or disengage, which in both cases Veno has the upper hand<br>
+            • He constantly pressures the opponent, not allowing him to lose the HP advantage<br>
+            • He prefers planning rotations early, which allows for easy uncontested layers and good positioning for surge<br>
+            • He also likes playing deadside as he tries to gain most of his surge in the early game via off spawn fights or surge trading (Refer to Deadside Rotations and Storm Surge)<br>
+            • Prefers to dominate on Low Ground rather than taking a risky fight for height which might compromise his game<br>
+            • Veno also tries to loot up extremely efficiently and quickly in order to maximise oppurtunities for early surge (We offer free Loot Routes for every location on the map, you can find them in this channel and below)<br>
+            • He has mastered controlling the pace of the game, whether its when to engage, rotate or pivot into better positions<br>
+            • He doesnt let his opponent set the tempo of the game, using smart positioning, quick edits and precise timing to keep them guessing and to stay unpredictable
+        </div></div>
+
+        <div class="step"><div class="title">👑 Pollo's Consistency & Comms</div><div class="step-desc">• Speed doesn't = good • Consistency over flash • Calm voice / Chill endgame • Precise callouts (enemy 70) • Team-first loot strategy</div></div>
+
+        <div class="step"><div class="title">👑 K1ng Notes</div><div class="step-desc">• Sneak damage / Health lead • Making space while fighting • Quick safe finishes • Pressuring team from 2 sites • Mid layer specialist • Tank zone for loot logic</div></div>
+
+        <div class="step"><div class="title">👑 Acorn's Tactics</div><div class="step-desc">• Landing scouts • Team pinches • Mountain surge tags • Ramp-in-box trick • Staggered endgames • Position for pull • Rotate timing • Height cones logic</div></div>
+
+        <div class="step"><div class="title">👑 Cooper's Strategy</div><div class="step-desc">• 65 points for win focus • Uncontested looting • Don't over commit • Fight for loot not grief • Box up safe • Right hand only • Reposition constant</div></div>
+        
+        <div class="step"><div class="title">💎 Boltz's Elite Fundamentals</div><div class="step-desc">• Super patient • Amazing positional awareness • Prioritises resource management • Perfect crosshair placement • Analyses replays • Controls pace</div></div>
+
+        <div class="step">
+            <div class="title">🧠 Martoz Mastery Notes</div>
+            <div class="step-desc">
+                The number one reason, People are not improving OR are improving slowly, Is most likely you're not focusing on getting better at all, you're probably just playing the game and hoping to see some improvement one day, The reason pros, Are pros these days, Is because they pinpoint the things the know they need to improve atm, And are actually serious about getting better at the game.
+                <br><br>
+                Example from a pro named IDrop- It is not about how much time u play, It's important about how effective you are.
+                <br><br>
+                More examples -
+                Lets say we got player 1 that plays 8 hours a day, and player 2 that plays 4 hours a day.
+                Player 2 is going to be better because he know what to focus on, And what to practice on.
+                Player 1 is going to become a pro after a long time. Because he knows he has alot of time and he will probably play around alot.
+                <br><br>
+                So to become a pro, You should find out how are you dying, and what kind of mechanic you mess up.
+                To improve the mechanic that you mess up a lot, You need to load up into a FFA boxfight map, Or a 1v1 map depends in which place you are messing up, I recommend <b>martoz ffa map - 1513-6690-9481</b> and focus on the mechanic without doing anything else, If you keep on dying with practicing the mechanic, Try not to get pissed off and give up, Try to countnue practicing it until you master it until it becomes muscle memory.
+            </div>
+        </div>
+    </div>
+
+    <!-- GAME SENSE -->
+    <div id="gamesense" class="tab-content">
+        <h2>How to Improve your Game Sense</h2>
+        <div class="step">
+            <div class="title">Learn Map Knowledge</div>
+            <div class="step-desc">
+                • <b>Familiarize Yourself with POIs:</b> Know the layout of popular points of interest (POIs) and their loot distribution.<br>
+                • <b>Understand Terrain:</b> Get to know where high ground, cover, and natural chokepoints are located.
+            </div>
+        </div>
+        <div class="step">
+            <div class="title">Understand the Meta</div>
+            <div class="step-desc">
+                • <b>Stay Updated:</b> Keep up with patch notes and changes to weapons, items, and mechanics.<br>
+                • <b>Adapt to Current Trends:</b> Be aware of which weapons and strategies are popular in the current meta.
+            </div>
+        </div>
+        <div class="step">
+            <div class="title">Watch and Analyze Gameplay</div>
+            <div class="step-desc">
+                • <b>Study Pros and Streamers:</b> Observe how experienced players position themselves, make decisions, and handle different situations.<br>
+                • <b>Review Your Own Gameplay:</b> Record and review your matches to analyze mistakes and identify areas for improvement.
+            </div>
+        </div>
+        <div class="step">
+            <div class="title">Develop a Tactical Mindset</div>
+            <div class="step-desc">
+                • <b>Anticipate Enemy Movements:</b> Predict where enemies are likely to be based on their potential movement patterns and your knowledge of the map.<br>
+                • <b>Plan Your Moves:</b> Think ahead about your next move, whether it’s positioning, looting, or engaging in a fight.
+            </div>
+        </div>
+        <div class="step">
+            <div class="title">Improve Your Decision-Making</div>
+            <div class="step-desc">
+                • <b>Assess Risk vs. Reward:</b> Evaluate whether engaging in a fight or taking a specific route will benefit you more or put you at risk.<br>
+                • <b>Know When to Engage or Retreat:</b> Recognize when to fight or avoid combat based on your current resources and position.
+            </div>
+        </div>
+        <div class="step">
+            <div class="title">Practice Communication</div>
+            <div class="step-desc">
+                • <b>Play with a Team:</b> Team up with friends or regular players to improve communication and coordination.<br>
+                • <b>Use Callouts:</b> Develop and use effective callouts to share information with teammates.
+            </div>
+        </div>
+        <div class="step">
+            <div class="title">Focus on Game Mechanics</div>
+            <div class="step-desc">
+                • <b>Master Building:</b> Practice building quickly and effectively to create cover and gain high ground.<br>
+                • <b>Improve Accuracy:</b> Work on your aiming and shooting skills to increase your chances of winning gunfights.
+            </div>
+        </div>
+        <div class="step">
+            <div class="title">Adapt and Learn</div>
+            <div class="step-desc">
+                • <b>Be Flexible:</b> Adjust your strategies based on the flow of the game and the behavior of other players.<br>
+                • <b>Learn from Defeats:</b> Analyze losses to understand what went wrong and how you can avoid similar mistakes in the future.
+            </div>
+        </div>
+
+        <div class="takeaway-box">
+            <div class="title" style="color: var(--flame-color);"> enquanto VOD reviewing, ask yourself:</div>
+            <div class="step-desc" style="color: #fff;">
+                • What actually went wrong here?<br>
+                • Could I have rotated earlier?<br>
+                • Was that fight worth taking?<br>
+                • Did I not check my surroundings enough?<br><br>
+                It’s not about blaming yourself — it’s about being honest and figuring out what you could’ve done differently. That’s how you turn a loss into progress.
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="title">Growth Logic</div>
+            <div class="step-desc">
+                You can also watch how top pros handle those same situations. Maybe they rotated differently or played a fight slower. Comparing your decisions to theirs helps you start thinking like them — and that’s where the real growth happens.<br><br>
+                Improving your game sense isn’t about grinding 10 hours a day. It’s about playing smart, thinking ahead, and letting each match teach you something.<br><br>
+                The more aware you are of your past mistakes, the less likely you are to repeat them — and before you know it, you’ll be playing cleaner, making better calls, and climbing way more consistently.<br><br>
+                <b>Don’t play repetitive scenarios, play on varied fields for varied practice.</b><br><br>
+                Best way to improve is by playing a lot of tournaments. Watch more endgames from youtube videos, etc. Pro vod review. Will help you understand how pros are getting better, And win a lot and I mean a lot of money. Play more ranked. Playing ranked is going to improve your game sense. You will learn a lot of exploits in tournaments and more. Watch pro players. I recommend IGL ones, Like khanada, Acorn, MrSavage and more.
+            </div>
+        </div>
+    </div>
+
+    <!-- ZONES -->
+    <div id="zones" class="tab-content">
+        <h2>Zones Prediction</h2>
+        <div class="step">
+            <div class="step-desc">In Second zone u can easily predict every zone from 2nd to 4th-5th. simply draw 2 lines on the map and whatever way the zone is pulling toward, draw a circle near the middle of the map toward the following angle.<br><br><b style="color: var(--flame-color);">👉 The circle is a safe spot until half and half.</b></div>
+            <img src="image.png" alt="Zone Prediction Map" class="zone-image">
+        </div>
+    </div>
+
+    <!-- CALCS -->
+    <div id="freecalc" class="tab-content"><div class="calcWrap"><iframe src="https://www.embenco.nl/drop-calculator/"></iframe></div></div>
+    <div id="dropmazter" class="tab-content"><div class="calcWrap"><a href="https://www.dropmazter.com/" target="_blank" class="btn-launch" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);">Open Dropmazter.com</a><iframe src="https://www.dropmazter.com/"></iframe></div></div>
+
+    <script>
+        function openTab(tabName, el){
+            document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
+            document.querySelectorAll(".tab").forEach(t => t.classList.remove("activeTab"));
+            document.getElementById(tabName).classList.add("active");
+            el.classList.add("activeTab");
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        document.addEventListener('copy', (e) => e.preventDefault());
+        document.addEventListener('dragstart', (e) => e.preventDefault());
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && (e.key === 'c' || e.key === 'u' || e.key === 's')) e.preventDefault();
+        });
+    </script>
+</body>
+</html>
